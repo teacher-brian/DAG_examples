@@ -1,0 +1,72 @@
+---
+title: "DAG"
+author: "Brian Holt"
+date: "5/6/2020"
+output:
+  html_document: null
+  pdf_document: default
+  toc: yes
+  toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+#library(tidyverse)
+library(here)
+library(ggdag)
+library(dagitty)
+```
+
+
+```{r}
+dag <- dagitty("dag {
+  X1 -> X2
+  X1 -> Y
+  X3 -> X2
+  X2 -> Y
+  X2 -> T -> Y
+  X3 -> T
+               }")
+plot( graphLayout( dag ) )
+```
+
+```{r}
+smoking_ca_dag <- dagify(cardiacarrest ~ cholesterol,
+       cholesterol ~ smoking + weight,
+       smoking ~ unhealthy,
+       weight ~ unhealthy,
+       labels = c("cardiacarrest" = "Cardiac\n Arrest", 
+                  "smoking" = "Smoking",
+                  "cholesterol" = "Cholesterol",
+                  "unhealthy" = "Unhealthy\n Lifestyle",
+                  "weight" = "Weight"),
+       latent = "unhealthy",
+       exposure = "smoking",
+       outcome = "cardiacarrest")
+
+ggdag(smoking_ca_dag, text = FALSE, use_labels = "label")
+```
+
+
+
+
+```{r}
+eating_dis_dag <- dagify(eatingdis ~ family.meals,
+       labels = c("eatingdis" = 'eating disorder', 
+                  "family.meals" = "Family meals"),
+       exposure = "family.meals",
+       outcome = "eatingdis")
+
+ggdag(eating_dis_dag, text = FALSE, use_labels = "label")
+```
+
+```{r}
+dagify(fever ~ flu + pox, 
+        acetaminophen ~ fever,
+        labels = c("flu" = "Influenza",
+                   "pox" = "Chicken Pox",
+                   "fever" = "Fever",
+                   "acetaminophen" = "Acetaminophen")) %>% 
+ggdag_dseparated(from = "flu", to = "pox", controlling_for = "acetaminophen",
+                 text = FALSE, use_labels = "label")
+```
