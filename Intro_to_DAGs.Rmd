@@ -70,3 +70,31 @@ dagify(fever ~ flu + pox,
 ggdag_dseparated(from = "flu", to = "pox", controlling_for = "acetaminophen",
                  text = FALSE, use_labels = "label")
 ```
+
+
+```{r}
+layout <- as.data.frame(matrix(c(seq(1:4), seq(1:4)), ncol = 2))
+
+layout$name <- c("flu", "pox", "fever", "acetaminophen")
+
+colnames(layout)[1:2] <- c("x", "y")
+
+dagify(fever ~ flu + pox,
+
+acetaminophen ~ fever,
+
+labels = c("flu" = "Influenza",
+
+"pox" = "Chicken Pox",
+
+"fever" = "Fever",
+
+"acetaminophen" = "Acetaminophen"),
+
+coords = layout) %>%
+
+ggdag_dseparated(from = "flu", to = "pox", controlling_for = "acetaminophen",
+
+text = FALSE, use_labels = "label")
+```
+
