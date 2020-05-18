@@ -51,13 +51,17 @@ ggdag(smoking_ca_dag, text = FALSE, use_labels = "label")
 
 
 ```{r}
+
+layout <- data.frame('x'=seq(1:2),'y'=seq(1,2),
+                     'name'= c('family.meals','eatingdis'))
 eating_dis_dag <- dagify(eatingdis ~ family.meals,
        labels = c("eatingdis" = 'eating disorder', 
                   "family.meals" = "Family meals"),
        exposure = "family.meals",
-       outcome = "eatingdis")
+       outcome = "eatingdis",
+       coords = layout )
 
-ggdag(eating_dis_dag, text = FALSE, use_labels = "label")
+ggdag_dseparated(from='family.meals', to='eatingdis', eating_dis_dag, text = FALSE, use_labels = "label")
 ```
 
 ```{r}
@@ -98,3 +102,16 @@ ggdag_dseparated(from = "flu", to = "pox", controlling_for = "acetaminophen",
 text = FALSE, use_labels = "label")
 ```
 
+
+
+```{r,bayescorona,fig.dim=c(4,3)}
+BayesCorona <- dagitty("dag {
+  begin -> Virus_0.4
+  begin -> NoVirus_99.6
+  Virus_0.4 -> TruePos_97
+  Virus_0.4 -> FalseNeg
+  NoVirus_99.6 -> FalsePos_3
+  NoVirus_99.6 -> TrueNeg
+               }")
+plot( graphLayout( BayesCorona ) )
+```
