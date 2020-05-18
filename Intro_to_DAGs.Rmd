@@ -104,14 +104,33 @@ text = FALSE, use_labels = "label")
 
 
 
-```{r,bayescorona,fig.dim=c(4,3)}
-BayesCorona <- dagitty("dag {
-  begin -> Virus_0.4
-  begin -> NoVirus_99.6
-  Virus_0.4 -> TruePos_97
-  Virus_0.4 -> FalseNeg
-  NoVirus_99.6 -> FalsePos_3
-  NoVirus_99.6 -> TrueNeg
-               }")
-plot( graphLayout( BayesCorona ) )
+```{r,bayescorona}
+
+layout <- list(x=c(begin_100=1,
+                   Virus_0.4=2,
+                   NoVirus_99.6=2,
+                   TruePos_97=3,
+                   FalseNeg=3,
+                   FalsePos_3=3,
+                   TrueNeg=3),
+               y=c(begin_100=0,
+                   Virus_0.4=1,
+                   NoVirus_99.6=-1,
+                   TruePos_97=2,
+                   FalseNeg=1,
+                   FalsePos_3=-1,
+                   TrueNeg=-2)
+               )
+
+layout
+BayesCorona <- dagify(
+  Virus_0.4~begin_100,
+  NoVirus_99.6~begin_100,
+  TruePos_97~Virus_0.4,
+  FalseNeg~Virus_0.4,
+  FalsePos_3~NoVirus_99.6,
+  TrueNeg~NoVirus_99.6,
+  coords=layout
+)
+ggdag( BayesCorona ,node_size = 35)
 ```
