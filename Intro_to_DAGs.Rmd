@@ -134,3 +134,19 @@ BayesCorona <- dagify(
 )
 ggdag( BayesCorona ,node_size = 35)
 ```
+
+
+
+
+# for Buelah
+
+```{r}
+chae <- dagitty("dag {
+  Exposure_to_alc -> Want_to_copy_parents_bx
+  Want_to_copy_parents_bx -> Alcohol_abuse
+  Toxic_home_enviornment -> Exposure_to_alc
+  Toxic_home_enviornment -> child_wants_sense_of_belong
+  child_wants_sense_of_belong -> Want_to_copy_parents_bx
+               }")
+plot( graphLayout( chae ) )
+```
