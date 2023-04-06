@@ -3,10 +3,9 @@ title: "DAG"
 author: "Brian Holt"
 date: "5/6/2020"
 output:
-  html_document: null
-  pdf_document: default
-  toc: yes
-  toc_depth: 3
+  html_document: 
+    toc: true
+    toc_depth: 3
 ---
 
 ```{r setup, include=FALSE}
@@ -17,7 +16,7 @@ library(ggdag)
 library(dagitty)
 ```
 
-
+# basic dag
 ```{r}
 dag <- dagitty("dag {
   X1 -> X2
@@ -29,6 +28,7 @@ dag <- dagitty("dag {
                }")
 plot( graphLayout( dag ) )
 ```
+# smoking
 
 ```{r}
 smoking_ca_dag <- dagify(cardiacarrest ~ cholesterol,
@@ -49,6 +49,7 @@ ggdag(smoking_ca_dag, text = FALSE, use_labels = "label")
 
 
 
+# eating disorder and family
 
 ```{r}
 
@@ -63,6 +64,8 @@ eating_dis_dag <- dagify(eatingdis ~ family.meals,
 
 ggdag_dseparated(from='family.meals', to='eatingdis', eating_dis_dag, text = FALSE, use_labels = "label")
 ```
+
+# Fever and flu
 
 ```{r}
 dagify(fever ~ flu + pox, 
@@ -103,6 +106,7 @@ text = FALSE, use_labels = "label")
 ```
 
 
+# covid bayesian
 
 ```{r,bayescorona}
 
